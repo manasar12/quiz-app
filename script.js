@@ -40,12 +40,12 @@ function loadQuestion() {
     const btn = document.createElement("div");
     btn.classList.add("option");
     btn.innerText = opt;
-    btn.onclick = () => checkAnswer(btn, opt);
+    btn.onclick = () => selectOption(btn, opt);
     optionsEl.appendChild(btn);
   });
 
   // Update progress bar
-  let progressPercent = ((currentQuestion) / quizData.length) * 100;
+  let progressPercent = (currentQuestion / quizData.length) * 100;
   progressBar.style.width = progressPercent + "%";
 
   // Reset and start timer
@@ -60,6 +60,14 @@ function loadQuestion() {
       nextQuestion();
     }
   }, 1000);
+}
+
+// Highlight selected option first
+function selectOption(selectedBtn, selected) {
+  const allOptions = document.querySelectorAll(".option");
+  allOptions.forEach(opt => opt.classList.remove("selected"));
+  selectedBtn.classList.add("selected");
+  checkAnswer(selectedBtn, selected);
 }
 
 function checkAnswer(selectedBtn, selected) {
@@ -95,3 +103,4 @@ function nextQuestion() {
 }
 
 loadQuestion();
+
