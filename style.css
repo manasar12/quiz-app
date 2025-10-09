@@ -7,6 +7,7 @@ body {
   height: 100vh;
   margin: 0;
 }
+
 .quiz-container {
   background: #fff;
   width: 400px;
@@ -15,6 +16,7 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   text-align: center;
 }
+
 .option {
   display: block;
   background: #f1f1f1;
@@ -24,9 +26,19 @@ body {
   cursor: pointer;
   transition: background 0.3s;
 }
+
 .option:hover {
   background: #dfe6e9;
 }
+
+.option.correct {
+  background: #55efc4 !important;
+}
+
+.option.wrong {
+  background: #ff7675 !important;
+}
+
 .btn {
   background: #0984e3;
   color: white;
@@ -37,20 +49,24 @@ body {
   cursor: pointer;
   transition: 0.3s;
 }
+
 .btn:hover {
   background: #74b9ff;
 }
+
 .result {
   font-size: 18px;
   font-weight: bold;
   margin-top: 20px;
 }
+
 .timer {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 15px;
   color: #d63031;
 }
+
 .progress-container {
   background: #dfe6e9;
   border-radius: 5px;
@@ -58,6 +74,7 @@ body {
   margin: 15px 0;
   overflow: hidden;
 }
+
 .progress-bar {
   background: #0984e3;
   height: 100%;
