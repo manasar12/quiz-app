@@ -24,11 +24,16 @@ body {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.1s;
 }
 
 .option:hover {
   background: #dfe6e9;
+}
+
+.option.selected {
+  background: #b2bec3; /* darker gray to show selected */
+  transform: scale(0.98);
 }
 
 .option.correct {
@@ -81,3 +86,4 @@ body {
   width: 0%;
   transition: width 0.3s;
 }
+
