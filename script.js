@@ -1,85 +1,83 @@
-const quizData = [
-  {
-    question: "Which language is used for web apps?",
-    options: ["Python", "JavaScript", "C++", "Java"],
-    answer: "JavaScript"
-  },
-  {
-    question: "What does CSS stand for?",
-    options: ["Cascading Style Sheets", "Colorful Style Sheets", "Computer Styled Sections", "Creative Style System"],
-    answer: "Cascading Style Sheets"
-  },
-  {
-    question: "Which HTML tag is used to create a hyperlink?",
-    options: ["<a>", "<link>", "<href>", "<p>"],
-    answer: "<a>"
-  },
-  {
-    question: "Inside which HTML element do we put JavaScript?",
-    options: ["<js>", "<javascript>", "<script>", "<code>"],
-    answer: "<script>"
-  }
-];
-
-let currentQuestion = 0;
-let score = 0;
-let timeLeft = 15;
-let timer;
-
-function loadQuestion() {
-  const questionEl = document.getElementById("question");
-  const optionsEl = document.getElementById("options");
-  const timerEl = document.getElementById("timer");
-  const progressBar = document.getElementById("progress-bar");
-
-  const q = quizData[currentQuestion];
-  questionEl.innerText = `Q${currentQuestion+1}: ${q.question}`;
-  optionsEl.innerHTML = "";
-  q.options.forEach(opt => {
-    const btn = document.createElement("div");
-    btn.classList.add("option");
-    btn.innerText = opt;
-    btn.onclick = () => checkAnswer(opt);
-    optionsEl.appendChild(btn);
-  });
-
-  // Update progress bar
-  let progressPercent = ((currentQuestion) / quizData.length) * 100;
-  progressBar.style.width = progressPercent + "%";
-
-  // Reset and start timer
-  clearInterval(timer);
-  timeLeft = 15;
-  timerEl.innerText = `Time Left: ${timeLeft}s`;
-  timer = setInterval(() => {
-    timeLeft--;
-    timerEl.innerText = `Time Left: ${timeLeft}s`;
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      nextQuestion();
-    }
-  }, 1000);
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-function checkAnswer(selected) {
-  if (selected === quizData[currentQuestion].answer) {
-    score++;
-  }
-  document.querySelectorAll(".option").forEach(opt => {
-    opt.onclick = null;
-  });
+.quiz-container {
+  background: #fff;
+  width: 400px;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
 }
 
-function nextQuestion() {
-  clearInterval(timer);
-  currentQuestion++;
-  if (currentQuestion < quizData.length) {
-    loadQuestion();
-  } else {
-    document.getElementById("quiz-container").innerHTML =
-      `<h2>Quiz Completed</h2>
-       <p class="result">Your Score: ${score} / ${quizData.length}</p>`;
-  }
+.option {
+  display: block;
+  background: #f1f1f1;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-loadQuestion();
+.option:hover {
+  background: #dfe6e9;
+}
+
+.option.correct {
+  background: #55efc4 !important;
+}
+
+.option.wrong {
+  background: #ff7675 !important;
+}
+
+.btn {
+  background: #0984e3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #74b9ff;
+}
+
+.result {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.timer {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #d63031;
+}
+
+.progress-container {
+  background: #dfe6e9;
+  border-radius: 5px;
+  height: 15px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: #0984e3;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s;
+}
