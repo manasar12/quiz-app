@@ -25,6 +25,7 @@ let currentQuestion = 0;
 let score = 0;
 let timeLeft = 15;
 let timer;
+let selectionDelay; // handle the short delay so user sees selected state
 
 function loadQuestion() {
   const questionEl = document.getElementById("question");
@@ -40,16 +41,18 @@ function loadQuestion() {
     const btn = document.createElement("div");
     btn.classList.add("option");
     btn.innerText = opt;
-    btn.onclick = () => selectOption(btn, opt);
+    // attach click handler to show selection immediately then evaluate
+    btn.addEventListener("click", () => selectOption(btn, opt));
     optionsEl.appendChild(btn);
   });
 
-  // Update progress bar
+  // Update progress bar (how many completed)
   let progressPercent = (currentQuestion / quizData.length) * 100;
   progressBar.style.width = progressPercent + "%";
 
   // Reset and start timer
   clearInterval(timer);
+  clearTimeout(selectionDelay);
   timeLeft = 15;
   timerEl.innerText = `Time Left: ${timeLeft}s`;
   timer = setInterval(() => {
@@ -57,17 +60,31 @@ function loadQuestion() {
     timerEl.innerText = `Time Left: ${timeLeft}s`;
     if (timeLeft <= 0) {
       clearInterval(timer);
-      nextQuestion();
+      // if time runs out while user hasn't selected, reveal correct and move on
+      revealCorrectThenNext();
     }
   }, 1000);
 }
 
-// Highlight selected option first
+// show selected state immediately, then check answer after a short delay
 function selectOption(selectedBtn, selected) {
   const allOptions = document.querySelectorAll(".option");
+  // remove any previous selected markers
   allOptions.forEach(opt => opt.classList.remove("selected"));
+
+  // add selected class to the clicked one so it's darker immediately
   selectedBtn.classList.add("selected");
-  checkAnswer(selectedBtn, selected);
+
+  // prevent further clicks right away
+  allOptions.forEach(opt => {
+    opt.style.pointerEvents = "none";
+  });
+
+  // small delay so user can visually see the darker selection before we show correct/wrong
+  clearTimeout(selectionDelay);
+  selectionDelay = setTimeout(() => {
+    checkAnswer(selectedBtn, selected);
+  }, 450); // 450ms gives an instant but visible cue
 }
 
 function checkAnswer(selectedBtn, selected) {
@@ -75,8 +92,9 @@ function checkAnswer(selectedBtn, selected) {
   const correctAnswer = quizData[currentQuestion].answer;
   const options = document.querySelectorAll(".option");
 
+  // reveal which is correct and mark selected as correct/wrong
   options.forEach(opt => {
-    opt.onclick = null; // disable further clicks
+    opt.style.pointerEvents = "none";
     if (opt.innerText === correctAnswer) {
       opt.classList.add("correct");
     }
@@ -90,8 +108,18 @@ function checkAnswer(selectedBtn, selected) {
   }
 }
 
+function revealCorrectThenNext() {
+  // used when time runs out - reveal correct option and then allow manual next
+  const correctAnswer = quizData[currentQuestion].answer;
+  document.querySelectorAll(".option").forEach(opt => {
+    opt.style.pointerEvents = "none";
+    if (opt.innerText === correctAnswer) opt.classList.add("correct");
+  });
+}
+
 function nextQuestion() {
   clearInterval(timer);
+  clearTimeout(selectionDelay);
   currentQuestion++;
   if (currentQuestion < quizData.length) {
     loadQuestion();
@@ -103,4 +131,3 @@ function nextQuestion() {
 }
 
 loadQuestion();
-
