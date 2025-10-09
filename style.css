@@ -17,6 +17,7 @@ body {
   text-align: center;
 }
 
+/* option base */
 .option {
   display: block;
   background: #f1f1f1;
@@ -24,24 +25,31 @@ body {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.1s;
+  transition: background 0.18s, transform 0.08s, box-shadow 0.18s;
+  user-select: none;
 }
 
+/* hover */
 .option:hover {
   background: #dfe6e9;
 }
 
+/* selected (immediate visual feedback) */
 .option.selected {
-  background: #b2bec3; /* darker gray to show selected */
-  transform: scale(0.98);
+  background: #9aa6ac;          /* noticeably darker */
+  transform: scale(0.995);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.03);
 }
 
+/* final feedback */
 .option.correct {
   background: #55efc4 !important;
+  color: #0a0a0a;
 }
 
 .option.wrong {
   background: #ff7675 !important;
+  color: #0a0a0a;
 }
 
 .btn {
@@ -86,3 +94,4 @@ body {
   width: 0%;
   transition: width 0.3s;
 }
+
